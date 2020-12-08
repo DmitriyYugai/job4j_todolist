@@ -41,7 +41,7 @@ public class ItemDao {
 
     public static void main(String[] args) {
         ItemDao itemDao = ItemDao.instOf();
-        itemDao.save(new Item("New Task", false));
+        itemDao.save(new Item("New Task 333", true));
         System.out.println(itemDao.findAll());
     }
 
