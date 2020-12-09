@@ -1,5 +1,6 @@
 package servlets;
 
+import com.google.gson.Gson;
 import daos.UserDao;
 import models.User;
 
@@ -12,6 +13,14 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class AuthServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("user");
+        user.setPassword(null);
+        Gson gson = new Gson();
+        resp.getWriter().print(gson.toJson(user));
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");

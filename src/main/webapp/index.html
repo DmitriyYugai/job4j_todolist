@@ -11,6 +11,15 @@
             $(document).ready(function(){
                 show();
                 setInterval('show()',1000);
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/todolist/login',
+                }).done(function(data) {
+                    const user = JSON.parse(data);
+                    document.querySelector('#auth').textContent = `${user.name} | Выйти`;
+                }).fail(function(err){
+                    alert(err);
+                });
             });
 
             function show() {
@@ -32,12 +41,15 @@
                         const num = document.createElement('td');
                         const desc = document.createElement('td');
                         const date = document.createElement('td');
+                        const user = document.createElement('td');
                         num.innerText = e.id;
                         desc.innerText = e.description;
                         date.innerText = e.created;
+                        user.innerText = e.user.name;
                         tr.append(num);
                         tr.append(desc);
                         tr.append(date);
+                        tr.append(user);
                         tbody.append(tr);
                     });
                 }).fail(function(err){
@@ -77,7 +89,7 @@
             <div class="row">
                 <div class="col-md-4 col-md-push-8">
                     <h4>Авторизация</h4>
-                    <a class="nav-link" href="/todolist/login.html">Войти</a>
+                    <a class="nav-link" href="/todolist/login.html" id="auth">Войти</a>
                 </div>
                 <div class="col-md-4 col-md-pull-4">
                     <h4>Добавить новое задание</h4>
@@ -106,6 +118,7 @@
                         <th>№</th>
                         <th>Описание</th>
                         <th>Дата создания</th>
+                        <th>Автор</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,6 +126,7 @@
                         <td>1</td>
                         <td>Задание 1</td>
                         <td>00.00.00</td>
+                        <td>Пользователь</td>
                     </tr>
                 </tbody>
             </table>
