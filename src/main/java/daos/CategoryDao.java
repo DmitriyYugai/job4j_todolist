@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.TimeZone;
 
 public class CategoryDao {
     private final SessionFactory sf;
@@ -34,5 +35,6 @@ public class CategoryDao {
 
     public static void main(String[] args) {
         System.out.println(CategoryDao.instOf().findAll());
+        System.out.println(TimeZone.getDefault());
     }
 }

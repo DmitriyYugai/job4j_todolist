@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS users;
 
-
 CREATE TABLE IF NOT EXISTS users(
     id serial primary key,
     name text,
