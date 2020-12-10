@@ -19,5 +19,6 @@
 
         <mapping class="models.Item" />
         <mapping class="models.User" />
+        <mapping class="models.Category" />
     </session-factory>
 </hibernate-configuration>

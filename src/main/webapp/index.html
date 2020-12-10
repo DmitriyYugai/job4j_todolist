@@ -20,6 +20,20 @@
                 }).fail(function(err){
                     alert(err);
                 });
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/todolist/category',
+                }).done(function(data) {
+                    $.each(JSON.parse(data), function (i, e) {
+                        const option = document.createElement('option');
+                        option.value = e.id;
+                        option.innerText = e.name;
+                        document.querySelector('#categories').append(option);
+                    });
+                }).fail(function(err){
+                    alert(err);
+                });
             });
 
             function show() {
@@ -42,14 +56,22 @@
                         const desc = document.createElement('td');
                         const date = document.createElement('td');
                         const user = document.createElement('td');
+                        const category = document.createElement('td');
                         num.innerText = e.id;
                         desc.innerText = e.description;
                         date.innerText = e.created;
                         user.innerText = e.user.name;
+                        var catStr = '';
+                        $.each(e.categories, function (i, c) {
+                            catStr = catStr + c.name + ', ';
+                        });
+                        catStr = catStr.substring(0, catStr.length - 2);
+                        category.innerText = catStr;
                         tr.append(num);
                         tr.append(desc);
                         tr.append(date);
                         tr.append(user);
+                        tr.append(category);
                         tbody.append(tr);
                     });
                 }).fail(function(err){
@@ -60,14 +82,27 @@
             function addItem() {
                 const desc = document.querySelector('#description');
                 const done = document.querySelector('#done');
-                if (desc.value == '') {
-                    alert('Добавьте описание');
+                const select = document.querySelector('#categories');
+                if (desc.value == '' || select.value == '') {
+                    alert('Добавьте описание и выберите категории');
+                    desc.value = '';
                     done.checked = false;
+                    select.value = '';
                     return;
+                }
+                var categories = [];
+                for (var i = 0; i < select.options.length; i++) {
+                    if (select.options[i].selected) {
+                        categories.push({
+                           id: select.options[i].value,
+                           name: select.options[i].innerText
+                        });
+                    }
                 }
                 const item = {
                     description: desc.value,
-                    done: done.checked
+                    done: done.checked,
+                    categories: categories
                 };
                 $.ajax({
                     type: 'PUT',
@@ -76,6 +111,7 @@
                 }).done(function(data) {
                     desc.value = '';
                     done.checked = false;
+                    select.value = '';
                 }).fail(function(err){
                     alert(err);
                 });
@@ -100,6 +136,12 @@
                     <label for="description">Описание</label>
                     <input type="text" class="form-control" id="description" placeholder="Добавьте описание" name="description">
                 </div>
+                <div class="form-group">
+                    <label for="categories">Выберите категории</label>
+                    <select multiple class="form-control" id="categories" name="categories">
+
+                    </select>
+                </div>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="done" name="done">
                     <label class="form-check-label" for="done">Выполнена</label>
@@ -119,6 +161,7 @@
                         <th>Описание</th>
                         <th>Дата создания</th>
                         <th>Автор</th>
+                        <th>Категории</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,6 +170,7 @@
                         <td>Задание 1</td>
                         <td>00.00.00</td>
                         <td>Пользователь</td>
+                        <td>Категории</td>
                     </tr>
                 </tbody>
             </table>

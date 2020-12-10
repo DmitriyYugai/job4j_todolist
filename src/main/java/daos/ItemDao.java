@@ -1,5 +1,6 @@
 package daos;
 
+import models.Category;
 import models.Item;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,7 +34,10 @@ public class ItemDao {
     public List<Item> findAll() {
         Session session = sf.openSession();
         session.beginTransaction();
-        List result = session.createQuery("from models.Item").list();
+        List result = session.createQuery("select distinct item " +
+                "from models.Item item " +
+                "join fetch item.user " +
+                "join fetch item.categories").list();
         session.getTransaction().commit();
         session.close();
         return result;
